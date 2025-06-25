@@ -10,6 +10,7 @@
 
 #include "GameWorld.h"
 #include "ResourceManager.h"
+#include "GameEnemy.h"
 
 #include "raylib/raylib.h"
 //#include "raylib/raymath.h"
@@ -20,14 +21,14 @@
 /**
  * @brief Creates a dinamically allocated GameWorld struct instance.
  */
-GameWorld* createGameWorld( void ) {
-
+GameWorld* createGameWorld(void) {
     GameWorld *gw = (GameWorld*) malloc( sizeof( GameWorld ) );
 
     gw->dummy = 0;
 
+    gw->gameEnemy = *initGameEnemy();
+    createGameEnemies(&gw->gameEnemy);
     return gw;
-
 }
 
 /**
@@ -52,14 +53,16 @@ void drawGameWorld( GameWorld *gw ) {
     BeginDrawing();
     ClearBackground( WHITE );
 
-    const char *text = "Basic game template";
-    Vector2 m = MeasureTextEx( GetFontDefault(), text, 40, 4 );
-    int x = GetScreenWidth() / 2 - m.x / 2;
-    int y = GetScreenHeight() / 2 - m.y / 2;
-    DrawRectangle( x, y, m.x, m.y, BLACK );
-    DrawText( text, x, y, 40, WHITE );
+    // const char *text = "Basic game template";
+    // Vector2 m = MeasureTextEx( GetFontDefault(), text, 40, 4 );
+    // int x = GetScreenWidth() / 2 - m.x / 2;
+    // int y = GetScreenHeight() / 2 - m.y / 2;
+    // DrawRectangle( x, y, m.x, m.y, BLACK );
+    // DrawText( text, x, y, 40, WHITE );
 
-    DrawFPS( 20, 20 );
+    drawGameEnemies(&gw->gameEnemy);
+
+    DrawFPS( 0, 0 );
 
     EndDrawing();
 

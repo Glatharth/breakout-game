@@ -6,9 +6,11 @@
  * @copyright Copyright (c) 2025
  */
 #pragma once
+#include "GameEnemy.h"
 
 typedef struct GameWorld {
     int dummy;
+    GameEnemy gameEnemy;
 } GameWorld;
 
 /**
