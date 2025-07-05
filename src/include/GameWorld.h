@@ -7,11 +7,17 @@
  */
 #pragma once
 #include "GameEnemy.h"
+#include "stdint.h"
 
 typedef struct GameWorld {
     int dummy;
+    uint64_t time;
     GameEnemy gameEnemy;
 } GameWorld;
+
+inline GameEnemy* getGameEnemy(GameWorld *gw) {
+    return &gw->gameEnemy;
+}
 
 /**
  * @brief Creates a dinamically allocated GameWorld struct instance.

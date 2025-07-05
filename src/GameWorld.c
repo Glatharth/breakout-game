@@ -25,6 +25,7 @@ GameWorld* createGameWorld(void) {
     GameWorld *gw = (GameWorld*) malloc( sizeof( GameWorld ) );
 
     gw->dummy = 0;
+    gw->time = 1;
 
     gw->gameEnemy = *initGameEnemy();
     createGameEnemies(&gw->gameEnemy);
@@ -42,7 +43,12 @@ void destroyGameWorld( GameWorld *gw ) {
  * @brief Reads user input and updates the state of the game.
  */
 void updateGameWorld( GameWorld *gw, float delta ) {
-
+    const uint64_t time = (uint64_t)GetTime();
+    if (gw->time == time) {
+        gw->time++;
+        // printf("%lu | %lu\n", gw->time, time);
+        updateEnemies(getGameEnemy(gw));
+    }
 }
 
 /**

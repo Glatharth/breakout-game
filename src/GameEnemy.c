@@ -7,6 +7,7 @@ GameEnemy* initGameEnemy() {
     GameEnemy *ge = malloc(sizeof(GameEnemy));
     ge->amount = 20; // Number of enemies per line
     ge->line = 8;
+    ge->space = 1;
     ge->fromPosition = (Vector2){0, 50}; //800 => width || 450 => height
     ge->toPosition = (Vector2){800, 200}; //800 => width || 450 => height
     ge->enemies = malloc(sizeof(Enemy*) * ge->amount * ge->line);
@@ -14,9 +15,9 @@ GameEnemy* initGameEnemy() {
 }
 
 void createGameEnemies(GameEnemy *ge) {
-     ge->size = (Size) {
-        ((int)ge->fromPosition.x + (int)ge->toPosition.x) / ge->amount ,
-        ((int)ge->toPosition.y - (int)ge->fromPosition.y) / ge->line
+    ge->size = (Size) {
+        ((int)ge->toPosition.x - (int)ge->fromPosition.x - (ge->space * (ge->amount - 1))) / ge->amount,
+        ((int)ge->toPosition.y - (int)ge->fromPosition.y - (ge->space * (ge->line - 1))) / ge->line
     };
     int arrayIndex = 0;
     for (int i = 0; i < ge->amount; i++) {
@@ -28,8 +29,15 @@ void createGameEnemies(GameEnemy *ge) {
             }
             ge->enemies[arrayIndex]->health = 100;
             ge->enemies[arrayIndex]->position = (Vector2){
-                ge->fromPosition.x + (float)(i * ge->size.width),
-                ge->fromPosition.y + (float)(j * ge->size.height)
+                ge->fromPosition.x + (float)(i * (ge->size.width + ge->space)),
+                ge->fromPosition.y + (float)(j * (ge->size.height + ge->space))
+            };
+            const int shift = 1;
+            ge->enemies[arrayIndex]->color = (Color){
+                (i << shift) % 256,
+                (i << (shift + 2)) % 256,
+                (i << (shift + 3)) % 256,
+                255
             };
             arrayIndex++;
         }
@@ -38,20 +46,24 @@ void createGameEnemies(GameEnemy *ge) {
 
 void drawGameEnemies(const GameEnemy *ge) {
     for (int i = 0; i < ge->amount * ge->line; i++) {
-        const int shift = 1;
         const Enemy enemy = *ge->enemies[i];
+        // if (!enemy) {
+        //     continue;
+        // }
         DrawRectangle(
            (int)enemy.position.x,
            (int)enemy.position.y,
            ge->size.width,
            ge->size.height,
-           // i % 2 == 0 ? GRAY : BLACK
-           (Color){
-                (i << shift) % 256,
-                (i << (shift + 2)) % 256,
-                (i << (shift + 4)) % 256,
-                255
-           }
+           enemy.color
         );
+    }
+}
+
+void updateEnemies(const GameEnemy *ge) {
+    for (int i = 0; i <ge->amount * ge->line; i++) {
+        Enemy *enemy = ge->enemies[i];
+
+        enemy->color = ColorFromHSV((float)i, 1, 1);
     }
 }
