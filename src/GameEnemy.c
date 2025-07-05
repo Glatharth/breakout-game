@@ -15,7 +15,7 @@ GameEnemy* initGameEnemy() {
 
 void createGameEnemies(GameEnemy *ge) {
      ge->size = (Size) {
-        ((int)ge->fromPosition.x + (int)ge->toPosition.x) / ge->amount ,
+        ((int)ge->fromPosition.x + (int)ge->toPosition.x) / ge->amount,
         ((int)ge->toPosition.y - (int)ge->fromPosition.y) / ge->line
     };
     int arrayIndex = 0;
