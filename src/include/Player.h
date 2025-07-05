@@ -1,6 +1,5 @@
 #pragma once
 #include "raylib/raylib.h"
-#include "GameWorld.h"
 
 typedef struct Player{
     Vector2 pos;

@@ -10,13 +10,14 @@
 #include "Ball.h"
 #include "enums.h"
 #include "Player.h"
+
 typedef struct GameWorld {
     int dummy;
     int roundNumber;
     State gameState;
     GameEnemy gameEnemy;
-    Player p;
-    Ball b;
+    Player player;
+    Ball ball;
 } GameWorld;
 /**
  * @brief Creates a dinamically allocated GameWorld struct instance.

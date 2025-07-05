@@ -1,7 +1,6 @@
 #pragma once
 #include "raylib/raylib.h"
 #include "GameWorld.h"
-#include "GamePhysics.h"
 
 typedef struct Ball{
     Vector2 pos;
@@ -10,4 +9,4 @@ typedef struct Ball{
     Color color;
 }Ball;
 
-void updateBall(Ball *b, float delta, GameWorld *gw);
+void updateBall(Ball *b, float delta);
