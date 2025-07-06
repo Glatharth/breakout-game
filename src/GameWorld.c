@@ -29,8 +29,8 @@
 GameWorld* createGameWorld(void) {
     GameWorld *gw = (GameWorld*) malloc( sizeof( GameWorld ) );
 
-    gw->dummy = 0;
     gw->time = 1;
+    gw->score = 0;
 
     gw->roundNumber = 0;
     gw->gameState = GAME_PAUSE;
@@ -65,7 +65,7 @@ GameWorld* createGameWorld(void) {
 
         .color = WHITE
     };
-
+    updateEnemyHealth(getGameEnemy(gw)->enemies[1], -1000);
     return gw;
 }
 
@@ -81,20 +81,28 @@ void destroyGameWorld( GameWorld *gw ) {
  */
 void updateGameWorld( GameWorld *gw, float delta ) {
     const uint64_t time = (uint64_t)GetTime();
+    Player* player = getPlayer(gw);
+    GameEnemy* enemies = getGameEnemy(gw);
+    Ball* ball = getBall(gw);
     if (gw->time == time) {
         gw->time++;
-        // printf("%lu | %lu\n", gw->time, time);
-        updateEnemies(getGameEnemy(gw));
+        updateEnemies(enemies);
     }
+    updatePlayer(player, delta);
+    updateBall(ball, delta);
+    updateCollision(ball, player, enemies);
 }
 
 /**
  * @brief Draws the state of the game.
  */
 void drawGameWorld( GameWorld *gw ) {
-
+    Player* player = getPlayer(gw);
+    Ball* ball = getBall(gw);
     BeginDrawing();
-    ClearBackground( WHITE );
+    ClearBackground(WHITE);
+    drawPlayer(player);
+    drawBall(ball);
 
     // const char *text = "Basic game template";
     // Vector2 m = MeasureTextEx( GetFontDefault(), text, 40, 4 );

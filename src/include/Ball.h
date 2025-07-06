@@ -8,4 +8,5 @@ typedef struct Ball{
     Color color;
 }Ball;
 
+void drawBall(Ball *b);
 void updateBall(Ball *b, float delta);

@@ -1,8 +1,6 @@
-#include "raylib/raylib.h"
+#pragma once
 #include "Ball.h"
-#include "enums.h"
 #include "GameEnemy.h"
-#include "GameWorld.h"
 #include "Player.h"
 
 void updateCollision(Ball *b, Player *p, GameEnemy *ge);

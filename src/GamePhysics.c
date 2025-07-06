@@ -17,10 +17,13 @@ void updateCollision(Ball *b, Player *p, GameEnemy *ge){
         }
     }
 
+    // if (*ge->) {
+    //
+    // }
     // for(int i = 0; i < ge->amount * ge->line; i++){
     //     const Enemy comparisonEnemy = *ge->enemies[i];
     //     const Size comparisonHeight = *ge->size.height;
-
+    //
     //     if(b->pos.y - b->radius < comparisonEnemy.position.y + ())
     // }
 }

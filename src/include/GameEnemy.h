@@ -3,6 +3,10 @@
 
 typedef struct Enemy {
     int health;     // Health of the enemy
+    int maxHealth;
+    int exp;
+    int pulse;
+    bool hide;
     Vector2 position; // Enemy Position
     Color color;    // Color
 } Enemy;
@@ -25,5 +29,8 @@ typedef struct GameEnemy {
 GameEnemy* initGameEnemy();
 
 void createGameEnemies(GameEnemy *ge);
-void drawGameEnemies(const GameEnemy *ge);
+void drawGameEnemies(GameEnemy *ge);
 void updateEnemies(GameEnemy *ge);
+int updateEnemyHealth(Enemy *enemy, int health);
+void setPulseEnemy(Enemy *enemy, int pulse);
+int getPulseEnemy(int pulse);
