@@ -1,0 +1,69 @@
+#include "GameEnemy.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "include/raylib/raylib.h"
+
+GameEnemy* initGameEnemy() {
+    GameEnemy *ge = malloc(sizeof(GameEnemy));
+    ge->amount = 20; // Number of enemies per line
+    ge->line = 8;
+    ge->space = 1;
+    ge->fromPosition = (Vector2){0, 50}; //800 => width || 450 => height
+    ge->toPosition = (Vector2){800, 200}; //800 => width || 450 => height
+    ge->enemies = malloc(sizeof(Enemy*) * ge->amount * ge->line);
+    return ge;
+}
+
+void createGameEnemies(GameEnemy *ge) {
+    ge->size = (Size) {
+        ((int)ge->toPosition.x - (int)ge->fromPosition.x - (ge->space * (ge->amount - 1))) / ge->amount,
+        ((int)ge->toPosition.y - (int)ge->fromPosition.y - (ge->space * (ge->line - 1))) / ge->line
+    };
+    int arrayIndex = 0;
+    for (int i = 0; i < ge->amount; i++) {
+        for (int j = 0; j < ge->line; j++) {
+            ge->enemies[arrayIndex] = malloc(sizeof(Enemy));
+            if (!ge->enemies[arrayIndex]) {
+                fprintf(stderr, "Memory allocation failed!\n");
+                exit(EXIT_FAILURE);
+            }
+            ge->enemies[arrayIndex]->health = 100;
+            ge->enemies[arrayIndex]->position = (Vector2){
+                ge->fromPosition.x + (float)(i * (ge->size.width + ge->space)),
+                ge->fromPosition.y + (float)(j * (ge->size.height + ge->space))
+            };
+            const int shift = 1;
+            ge->enemies[arrayIndex]->color = (Color){
+                (i << shift) % 256,
+                (i << (shift + 2)) % 256,
+                (i << (shift + 3)) % 256,
+                255
+            };
+            arrayIndex++;
+        }
+    }
+}
+
+void drawGameEnemies(const GameEnemy *ge) {
+    for (int i = 0; i < ge->amount * ge->line; i++) {
+        const Enemy enemy = *ge->enemies[i];
+        // if (!enemy) {
+        //     continue;
+        // }
+        DrawRectangle(
+           (int)enemy.position.x,
+           (int)enemy.position.y,
+           ge->size.width,
+           ge->size.height,
+           enemy.color
+        );
+    }
+}
+
+void updateEnemies(GameEnemy *ge) {
+    for (int i = 0; i <ge->amount * ge->line; i++) {
+        Enemy *enemy = ge->enemies[i];
+
+        enemy->color = ColorFromHSV((float)i, 1, 1);
+    }
+}
