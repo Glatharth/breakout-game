@@ -7,4 +7,4 @@
 
 void updateCollision(Ball *b, Player *p, GameEnemy *ge);
 
-int directionRamdomizer(void);
+int directionRandomizer(void);
