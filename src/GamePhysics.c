@@ -24,8 +24,8 @@ void updateCollision(Ball *b, Player *p, GameEnemy *ge){
     //     if(b->pos.y - b->radius < comparisonEnemy.position.y + ())
     // }
 }
-//ramdomize the ball's direction in the beginning of each round based on a odd or even number logic
-int directionRamdomizer (void){
+//randomize the ball's direction in the beginning of each round based on an odd or even number logic
+int directionRandomizer (void){
     int direction = GetRandomValue(1, 10);
     if(direction % 2 == 0){
         return 150;
