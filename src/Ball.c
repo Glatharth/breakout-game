@@ -1,7 +1,6 @@
 #include "raylib/raylib.h"
 #include "Ball.h"
 #include "enums.h"
-#include "GameWorld.h"
 #include "GamePhysics.h"
 
 void drawBall(Ball *b){
