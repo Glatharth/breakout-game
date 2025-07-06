@@ -60,7 +60,7 @@ void drawGameEnemies(const GameEnemy *ge) {
     }
 }
 
-void updateEnemies(const GameEnemy *ge) {
+void updateEnemies(GameEnemy *ge) {
     for (int i = 0; i <ge->amount * ge->line; i++) {
         Enemy *enemy = ge->enemies[i];
 
