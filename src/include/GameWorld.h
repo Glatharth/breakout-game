@@ -7,7 +7,7 @@
  */
 #pragma once
 #include "GameEnemy.h"
-#include "stdint.h"
+#include <stdint.h>
 #include "Ball.h"
 #include "enums.h"
 #include "Player.h"
