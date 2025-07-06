@@ -26,4 +26,4 @@ GameEnemy* initGameEnemy();
 
 void createGameEnemies(GameEnemy *ge);
 void drawGameEnemies(const GameEnemy *ge);
-void updateEnemies(const GameEnemy *ge);
+void updateEnemies(GameEnemy *ge);
