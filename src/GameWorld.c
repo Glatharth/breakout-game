@@ -65,7 +65,7 @@ GameWorld* createGameWorld(void) {
 
         .color = WHITE
     };
-    updateEnemyHealth(getGameEnemy(gw)->enemies[1], -1000);
+
     return gw;
 }
 
@@ -100,7 +100,8 @@ void drawGameWorld( GameWorld *gw ) {
     Player* player = getPlayer(gw);
     Ball* ball = getBall(gw);
     BeginDrawing();
-    ClearBackground(WHITE);
+    ClearBackground(BLACK);
+    drawGameEnemies(&gw->gameEnemy);
     drawPlayer(player);
     drawBall(ball);
 
@@ -110,11 +111,6 @@ void drawGameWorld( GameWorld *gw ) {
     // int y = GetScreenHeight() / 2 - m.y / 2;
     // DrawRectangle( x, y, m.x, m.y, BLACK );
     // DrawText( text, x, y, 40, WHITE );
-
-
-
-    drawGameEnemies(&gw->gameEnemy);
-
     //DrawFPS( 0, 0 );
 
     EndDrawing();
