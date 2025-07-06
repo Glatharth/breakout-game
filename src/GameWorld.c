@@ -85,6 +85,9 @@ void updateGameWorld( GameWorld *gw, float delta ) {
         gw->time++;
         // printf("%lu | %lu\n", gw->time, time);
         updateEnemies(getGameEnemy(gw));
+        updateCollision(&gw->ball, &gw->player, &gw->gameEnemy);
+        updatePlayer(&gw->player, delta);
+        updateBall(&gw->ball, delta);
     }
 }
 
@@ -94,7 +97,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
 void drawGameWorld( GameWorld *gw ) {
 
     BeginDrawing();
-    ClearBackground( WHITE );
+    ClearBackground( BLACK );
 
     // const char *text = "Basic game template";
     // Vector2 m = MeasureTextEx( GetFontDefault(), text, 40, 4 );
@@ -106,6 +109,9 @@ void drawGameWorld( GameWorld *gw ) {
 
 
     drawGameEnemies(&gw->gameEnemy);
+    drawPlayer(&gw->player);
+    drawBall(&gw->ball);
+
 
     //DrawFPS( 0, 0 );
 

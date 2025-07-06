@@ -17,13 +17,21 @@ void updateCollision(Ball *b, Player *p, GameEnemy *ge){
         }
     }
 
-    // for(int i = 0; i < ge->amount * ge->line; i++){
-    //     const Enemy comparisonEnemy = *ge->enemies[i];
-    //     const Size comparisonHeight = *ge->size.height;
+    for(int i = 0; i < ge->amount * ge->line; i++){
+        if(b->pos.x + b->radius < ge->enemies[i]->position.x + ge->size.width && b->pos.x - b->radius > ge->enemies[i]->position.x){
+            if(b->pos.y +-b->radius >= ge->enemies[i]->position.y + ge->size.height){
+                b->vel.y = -b->vel.y;
+            }
+        }
 
-    //     if(b->pos.y - b->radius < comparisonEnemy.position.y + ())
-    // }
+        if(b->pos.y + b->radius < ge->enemies[i]->position.y + ge->size.height && b->pos.y - b->radius > ge->enemies[i]->position.y){
+            if(b->pos.x + b->radius == ge->enemies[i]->position.x || b->pos.x - b->radius == ge->enemies[i]->position.x + ge->size.width){
+                b->vel.x = -b->vel.x;
+            }
+        }
+    }
 }
+
 //randomize the ball's direction in the beginning of each round based on an odd or even number logic
 int directionRandomizer (void){
     int direction = GetRandomValue(1, 10);
