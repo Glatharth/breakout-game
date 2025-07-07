@@ -1,16 +1,20 @@
 #include "GameEnemy.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "ResourceManager.h"
 #include "include/raylib/raylib.h"
 
+int TOASTY = 0;
+
 GameEnemy* initGameEnemy() {
-    GameEnemy *ge = malloc(sizeof(GameEnemy));
+    GameEnemy *ge = calloc(1, sizeof(GameEnemy));
     ge->amount = 20; // Number of enemies per line
     ge->line = 8;
     ge->space = 5;
     ge->fromPosition = (Vector2){0, 50}; //800 => width || 450 => height
     ge->toPosition = (Vector2){800, 200}; //800 => width || 450 => height
-    ge->enemies = malloc(sizeof(Enemy*) * ge->amount * ge->line);
+    ge->enemies = calloc(ge->amount * ge->line, sizeof(Enemy*));
     ge->totalEnemies = ge->amount * ge->line;
     return ge;
 }
@@ -98,6 +102,8 @@ int updateEnemyHealth(Enemy *enemy, const int health) {
         enemy->health += health;
         if (enemy->health <= 0) {
             setPulseEnemy(enemy, 3);
+            PlaySound(rm.deadEnemy);
+            TOASTY++;
             return enemy->exp;
         }
     }

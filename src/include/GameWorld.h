@@ -6,14 +6,16 @@
  * @copyright Copyright (c) 2025
  */
 #pragma once
-#include "GameEnemy.h"
 #include <stdint.h>
+
+#include "GameEnemy.h"
 #include "Ball.h"
 #include "enums.h"
 #include "Player.h"
 
+extern uint64_t GAME_TIME;
+
 typedef struct GameWorld {
-    uint64_t time;
     int life;
     State gameState;
     GameEnemy gameEnemy;
@@ -58,3 +60,5 @@ void drawGameLayout(GameWorld *gw);
 void drawPlayerStats(GameWorld *gw);
 
 void updateLife(GameWorld *gw);
+
+void toastyAnimation();

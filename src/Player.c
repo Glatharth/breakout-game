@@ -1,6 +1,6 @@
 #include "raylib/raylib.h"
 #include "Player.h"
-#include "enums.h"
+#include "ResourceManager.h"
 //draws the player on the screen
 void drawPlayer(Player *p){
     DrawRectangle(
@@ -14,7 +14,18 @@ void drawPlayer(Player *p){
 
 //manage the players movement 
 void updatePlayer(Player *p, float delta){
-    
+    static float volume = 0.1f;
+    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)){
+        volume += 0.01f;
+        if (volume > 1.0f) volume = 1.0f;
+        SetMusicVolume(rm.inGame, volume);
+    }
+    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)){
+        volume -= 0.01f;
+        if (volume < 0.0f) volume = 0.0f;
+        SetMusicVolume(rm.inGame, volume);
+    }
+
     if(IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)){
         p->pos.x -= p->vel * delta;
     }
