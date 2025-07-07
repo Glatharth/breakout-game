@@ -14,8 +14,6 @@
 
 typedef struct GameWorld {
     uint64_t time;
-    int score;
-    int roundNumber;
     int life;
     State gameState;
     GameEnemy gameEnemy;
@@ -34,10 +32,6 @@ inline Player* getPlayer(GameWorld *gw) {
 inline Ball* getBall(GameWorld *gw) {
     return &gw->ball;
 }
-
-// inline int getRoundNumber(GameWorld *gw) {
-//     return gw->roundNumber;
-// }
 
 /**
  * @brief Creates a dinamically allocated GameWorld struct instance.
@@ -58,8 +52,6 @@ void updateGameWorld( GameWorld *gw, float delta );
  * @brief Draws the state of the game.
  */
 void drawGameWorld( GameWorld *gw );
-
-void updateScore(GameWorld *gw);
 
 void drawGameLayout(GameWorld *gw);
 

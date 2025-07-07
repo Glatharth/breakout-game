@@ -7,10 +7,11 @@ GameEnemy* initGameEnemy() {
     GameEnemy *ge = malloc(sizeof(GameEnemy));
     ge->amount = 20; // Number of enemies per line
     ge->line = 8;
-    ge->space = 1;
+    ge->space = 5;
     ge->fromPosition = (Vector2){0, 50}; //800 => width || 450 => height
     ge->toPosition = (Vector2){800, 200}; //800 => width || 450 => height
     ge->enemies = malloc(sizeof(Enemy*) * ge->amount * ge->line);
+    ge->totalEnemies = ge->amount * ge->line;
     return ge;
 }
 
@@ -30,7 +31,7 @@ void createGameEnemies(GameEnemy *ge) {
             ge->enemies[arrayIndex]->health = 100;
             ge->enemies[arrayIndex]->maxHealth = 100;
             ge->enemies[arrayIndex]->pulse = 0;
-            ge->enemies[arrayIndex]->exp = 0;
+            ge->enemies[arrayIndex]->exp = 5;
             ge->enemies[arrayIndex]->hide = false;
             ge->enemies[arrayIndex]->position = (Vector2){
                 ge->fromPosition.x + (float)(i * (ge->size.width + ge->space)),
@@ -69,6 +70,7 @@ void drawGameEnemies(GameEnemy *ge) {
         if (enemy->health <= 0 && enemy->hide) {
             continue;
         }
+
         DrawRectangle(
            (int)enemy->position.x,
            (int)enemy->position.y,
@@ -76,13 +78,14 @@ void drawGameEnemies(GameEnemy *ge) {
            ge->size.height,
            enemy->color
         );
+
     }
 }
 
 void updateEnemies(GameEnemy *ge) {
     for (int i = 0; i < ge->amount * ge->line; i++) {
         Enemy *enemy = ge->enemies[i];
-        enemy->color = ColorFromHSV((float)i, 1, 1);
+        enemy->color = ColorFromHSV(i * 2, 1, 1);
     }
 }
 

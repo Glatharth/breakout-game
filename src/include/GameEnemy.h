@@ -24,6 +24,7 @@ typedef struct GameEnemy {
     Vector2 fromPosition; // Starting position
     Vector2 toPosition; // Ending position
     Enemy **enemies; // Array of enemies
+    int totalEnemies;
 } GameEnemy;
 
 GameEnemy* initGameEnemy();

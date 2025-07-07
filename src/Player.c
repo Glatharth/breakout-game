@@ -14,12 +14,7 @@ void drawPlayer(Player *p){
 
 //manage the players movement 
 void updatePlayer(Player *p, float delta){
-    //ensure that the player will be reset to it's original position when a life is lost
-    // if(gw->gameState == GAME_PAUSE || gw->gameState == GAME_OVER){
-    //     p->pos.x = GetScreenWidth() / 2 - 35;
-    //     p->pos.y = GetScreenHeight() - 75;
-    // }
-
+    
     if(IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)){
         p->pos.x -= p->vel * delta;
     }

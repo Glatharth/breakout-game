@@ -30,13 +30,10 @@ GameWorld* createGameWorld(void) {
     GameWorld *gw = (GameWorld*) malloc( sizeof( GameWorld ) );
 
     gw->time = 1;
-    gw->score = 0;
     gw->life = 3;
-    gw->roundNumber = 0;
     gw->gameState = GAME_PAUSE;
     gw->gameEnemy = *initGameEnemy();
     createGameEnemies(&gw->gameEnemy);
-    updateEnemyHealth(gw->gameEnemy.enemies[0], -100);
     gw->player = (Player) {
         .pos = {
             .x = GetScreenWidth() / 2 - 35,
@@ -49,7 +46,9 @@ GameWorld* createGameWorld(void) {
 
         .width = 70,
 
-        .color = WHITE
+        .color = WHITE,
+
+        .score = 0
     };
     gw->ball = (Ball) {
         .pos = {
@@ -93,7 +92,6 @@ void updateGameWorld( GameWorld *gw, float delta ) {
     updateBall(ball, delta);
     updateCollision(ball, player, enemies);
     updateLife(gw);
-    updateScore(gw);
 }
 
 /**
@@ -110,24 +108,8 @@ void drawGameWorld( GameWorld *gw ) {
     drawGameLayout(gw);
     drawPlayerStats(gw);
 
-    // const char *text = "Basic game template";
-    // Vector2 m = MeasureTextEx( GetFontDefault(), text, 40, 4 );
-    // int x = GetScreenWidth() / 2 - m.x / 2;
-    // int y = GetScreenHeight() / 2 - m.y / 2;
-    // DrawRectangle( x, y, m.x, m.y, BLACK );
-    // DrawText( text, x, y, 40, WHITE );
-    //DrawFPS( 0, 0 );
-
     EndDrawing();
 
-}
-
-void updateScore(GameWorld *gw){
-    for(int i = 0; i < gw->gameEnemy.amount * gw->gameEnemy.line; i++){
-        if(gw->gameEnemy.enemies[i]->health == 0){
-            gw->score++;
-        }
-    }
 }
 
 void drawGameLayout(GameWorld *gw){
@@ -136,14 +118,20 @@ void drawGameLayout(GameWorld *gw){
     const char *lostLife = "Voce perdeu uma vida!";
     const char *gameOver = "Game Over!";
     const char *restart = "Pressione <Espaço> para recomeçar";
+    const char *win = "Voce venceu!";
 
     int sizeTitle = MeasureText(title, 50);
     int sizeDefrost = MeasureText(defrost, 30);
     int sizeLostLife = MeasureText(lostLife, 40);
     int sizeGameOver = MeasureText(gameOver, 60);
     int sizeRestart =  MeasureText(restart, 30);
+    int sizeWin = MeasureText(win, 60);
+
+
+    Color backgroundColor = {0, 0, 0, 180};
 
     if(gw->gameState == GAME_PAUSE){
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), backgroundColor);
         if(gw->life == 3){
             DrawText(title, GetScreenWidth() / 2 - sizeTitle / 2, GetScreenHeight() / 2 - 150, 50, PURPLE);
             DrawText(defrost, GetScreenWidth() / 2 - sizeDefrost / 2, GetScreenHeight() / 2 - 60, 30, WHITE);
@@ -152,8 +140,13 @@ void drawGameLayout(GameWorld *gw){
             DrawText(defrost, GetScreenWidth() / 2 - sizeDefrost / 2, GetScreenHeight() / 2 - 30, 30, WHITE);
         }
     }else if(gw->gameState == GAME_OVER){
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), backgroundColor);
         DrawText(gameOver, GetScreenWidth() / 2 - sizeGameOver / 2, GetScreenHeight() / 2 - 150, 60, RED);
         DrawText(restart, GetScreenWidth() / 2 - sizeRestart / 2, GetScreenHeight() / 2 - 30,30,WHITE);
+    }else if(gw->gameState == GAME_WIN){
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLACK);
+        DrawText(win, GetScreenWidth() / 2 - (sizeWin / 2), GetScreenHeight() / 2 - 150, 60, GREEN);
+        drawPlayerStats(gw);
     }
 }
 
@@ -163,9 +156,9 @@ void drawPlayerStats(GameWorld *gw){
 
     int sizeScore = MeasureText(score, 30);
 
-    if(gw->gameState == GAME_START){
+    if(gw->gameState == GAME_START || gw->gameState == GAME_WIN){
         DrawText(TextFormat(life, gw->life), 10, GetScreenHeight() - 40, 30, WHITE);
-        DrawText(TextFormat(score, gw->score), GetScreenWidth() - sizeScore - 30, GetScreenHeight() - 40, 30, WHITE);
+        DrawText(TextFormat(score, getPlayer(gw)->score), GetScreenWidth() - sizeScore - 30, GetScreenHeight() - 40, 30, WHITE);
     }
 }
 

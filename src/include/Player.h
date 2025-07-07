@@ -7,6 +7,7 @@ typedef struct Player{
     int height;
     int width;
     Color color;
+    int score;
 }Player;
 
 void drawPlayer(Player *p);
