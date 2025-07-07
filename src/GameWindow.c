@@ -124,8 +124,12 @@ void initGameWindow( GameWindow *gameWindow ) {
                     if(gWorld->life == 0){
                         gWorld->life = 3;
                         getPlayer(gWorld)->score = 0;
+                        for(int i = 0; i < gWorld->gameEnemy.amount * gWorld->gameEnemy.line; i++){
+                            if(gWorld->gameEnemy.enemies[i]->health <= 0){
+                                gWorld->gameEnemy.enemies[i]->health = GetRandomValue(100, 400);
+                            }
+                        }
                     }
-                    
                 }
             }else if(getGameEnemy(gWorld)->totalEnemies <= 0){
                 gWorld->gameState = GAME_WIN;
@@ -148,6 +152,7 @@ void initGameWindow( GameWindow *gameWindow ) {
         CloseWindow();
 
     }
+
 
 }
 

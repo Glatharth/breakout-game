@@ -44,7 +44,7 @@ GameWorld* createGameWorld(void) {
             .y = GetScreenHeight() - 75,
         },
 
-        .vel = 250,
+        .vel = 350,
 
         .height = 10,
 
