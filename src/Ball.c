@@ -49,10 +49,5 @@ void updateBall(Ball *b, float delta){
     }
 
     //freezes the game as soon as the ball gets out of the bottom part of the screen and decrease the number of lives
-    if(b->pos.y + b->radius > GetScreenHeight()){
-        b->pos.y = GetScreenHeight() / 2;
-        b->pos.x = GetScreenWidth() / 2;
-        // gw->gameState = true;
-        // gw->roundNumber++;
-    }
+    
 }

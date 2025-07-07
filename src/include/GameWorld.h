@@ -13,9 +13,8 @@
 #include "Player.h"
 
 typedef struct GameWorld {
-    int dummy;
     uint64_t time;
-    int roundNumber;
+    int life;
     State gameState;
     GameEnemy gameEnemy;
     Player player;
@@ -24,6 +23,14 @@ typedef struct GameWorld {
 
 inline GameEnemy* getGameEnemy(GameWorld *gw) {
     return &gw->gameEnemy;
+}
+
+inline Player* getPlayer(GameWorld *gw) {
+    return &gw->player;
+}
+
+inline Ball* getBall(GameWorld *gw) {
+    return &gw->ball;
 }
 
 /**
@@ -47,3 +54,7 @@ void updateGameWorld( GameWorld *gw, float delta );
 void drawGameWorld( GameWorld *gw );
 
 void drawGameLayout(GameWorld *gw);
+
+void drawPlayerStats(GameWorld *gw);
+
+void updateLife(GameWorld *gw);

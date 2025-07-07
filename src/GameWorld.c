@@ -29,10 +29,8 @@
 GameWorld* createGameWorld(void) {
     GameWorld *gw = (GameWorld*) malloc( sizeof( GameWorld ) );
 
-    gw->dummy = 0;
     gw->time = 1;
-
-    gw->roundNumber = 0;
+    gw->life = 3;
     gw->gameState = GAME_PAUSE;
     gw->gameEnemy = *initGameEnemy();
     createGameEnemies(&gw->gameEnemy);
@@ -48,7 +46,9 @@ GameWorld* createGameWorld(void) {
 
         .width = 70,
 
-        .color = WHITE
+        .color = WHITE,
+
+        .score = 0
     };
     gw->ball = (Ball) {
         .pos = {
@@ -57,7 +57,7 @@ GameWorld* createGameWorld(void) {
         },
 
         .vel = {
-            .x = 0,
+            .x = directionRandomizer(),
             .y = 150
         },
 
@@ -81,63 +81,99 @@ void destroyGameWorld( GameWorld *gw ) {
  */
 void updateGameWorld( GameWorld *gw, float delta ) {
     const uint64_t time = (uint64_t)GetTime();
+    Player* player = getPlayer(gw);
+    GameEnemy* enemies = getGameEnemy(gw);
+    Ball* ball = getBall(gw);
     if (gw->time == time) {
         gw->time++;
-        // printf("%lu | %lu\n", gw->time, time);
-        updateEnemies(getGameEnemy(gw));
+        updateEnemies(enemies);
     }
+    updatePlayer(player, delta);
+    updateBall(ball, delta);
+    updateCollision(ball, player, enemies);
+    updateLife(gw);
 }
 
 /**
  * @brief Draws the state of the game.
  */
 void drawGameWorld( GameWorld *gw ) {
-
+    Player* player = getPlayer(gw);
+    Ball* ball = getBall(gw);
     BeginDrawing();
-    ClearBackground( WHITE );
-
-    // const char *text = "Basic game template";
-    // Vector2 m = MeasureTextEx( GetFontDefault(), text, 40, 4 );
-    // int x = GetScreenWidth() / 2 - m.x / 2;
-    // int y = GetScreenHeight() / 2 - m.y / 2;
-    // DrawRectangle( x, y, m.x, m.y, BLACK );
-    // DrawText( text, x, y, 40, WHITE );
-
-
-
+    ClearBackground(BLACK);
     drawGameEnemies(&gw->gameEnemy);
-
-    //DrawFPS( 0, 0 );
+    drawPlayer(player);
+    drawBall(ball);
+    drawGameLayout(gw);
+    drawPlayerStats(gw);
 
     EndDrawing();
 
 }
 
-// void drawGameLayout(GameWorld *gw){
-//     const char *title = "BreakDown";
-//     const char *defrost = "Pressione <Espaco> para continuar";
-//     const char *lostLife = "Voce perdeu uma vida!";
-//     const char *gameOver = "Game Over!";
-//     const char *restart = "Pressione <Espaço> para recomeçar";
+void drawGameLayout(GameWorld *gw){
+    const char *title = "BreakDown";
+    const char *defrost = "Pressione <Espaco> para continuar";
+    const char *lostLife = "Voce perdeu uma vida!";
+    const char *gameOver = "Game Over!";
+    const char *restart = "Pressione <Espaço> para recomeçar";
+    const char *win = "Voce venceu!";
 
-//     int sizeTitle = MeasureText(title, 50);
-//     int sizeDefrost = MeasureText(defrost, 30);
-//     int sizeLostLife = MeasureText(lostLife, 40);
-//     int sizeGameOver = MeasureText(gameOver, 60);
-//     int sizeRestart =  MeasureText(restart, 30);
+    int sizeTitle = MeasureText(title, 50);
+    int sizeDefrost = MeasureText(defrost, 30);
+    int sizeLostLife = MeasureText(lostLife, 40);
+    int sizeGameOver = MeasureText(gameOver, 60);
+    int sizeRestart =  MeasureText(restart, 30);
+    int sizeWin = MeasureText(win, 60);
 
-//     if(gw->gameState = GAME_PAUSE){
-//         if(lifeManager() == 3){
-//             DrawText(title, GetScreenWidth() / 2 - sizeTitle / 2, GetScreenHeight() / 2 - 150, 50, PURPLE);
-//             DrawText(defrost, GetScreenWidth() / 2 - sizeDefrost / 2, GetScreenHeight() / 2 - 60, 30, WHITE);
-//         }else if(lifeManager() < 3 && lifeManager() > 0){
-//             DrawText(lostLife, GetScreenWidth() / 2 - sizeLostLife / 2, GetScreenHeight() / 2 - 100, 40, RED);
-//             DrawText(defrost, GetScreenWidth() / 2 - sizeDefrost / 2, GetScreenHeight() / 2 - 30, 30, WHITE);
 
-//         }else{
-//             DrawText(gameOver, GetScreenWidth() / 2 - sizeGameOver / 2, GetScreenHeight() / 2 - 150, 60, RED);
-//             DrawText(restart, GetScreenWidth() / 2 - sizeRestart / 2, GetScreenHeight() / 2 - 30,30,WHITE);
-//         }
-//     }
-// }
+    Color backgroundColor = {0, 0, 0, 180};
 
+    if(gw->gameState == GAME_PAUSE){
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), backgroundColor);
+        if(gw->life == 3){
+            DrawText(title, GetScreenWidth() / 2 - sizeTitle / 2, GetScreenHeight() / 2 - 150, 50, PURPLE);
+            DrawText(defrost, GetScreenWidth() / 2 - sizeDefrost / 2, GetScreenHeight() / 2 - 60, 30, WHITE);
+        }else {
+            DrawText(lostLife, GetScreenWidth() / 2 - sizeLostLife / 2, GetScreenHeight() / 2 - 100, 40, RED);
+            DrawText(defrost, GetScreenWidth() / 2 - sizeDefrost / 2, GetScreenHeight() / 2 - 30, 30, WHITE);
+        }
+    }else if(gw->gameState == GAME_OVER){
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), backgroundColor);
+        DrawText(gameOver, GetScreenWidth() / 2 - sizeGameOver / 2, GetScreenHeight() / 2 - 150, 60, RED);
+        DrawText(restart, GetScreenWidth() / 2 - sizeRestart / 2, GetScreenHeight() / 2 - 30,30,WHITE);
+    }else if(gw->gameState == GAME_WIN){
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLACK);
+        DrawText(win, GetScreenWidth() / 2 - (sizeWin / 2), GetScreenHeight() / 2 - 150, 60, GREEN);
+        drawPlayerStats(gw);
+    }
+}
+
+void drawPlayerStats(GameWorld *gw){
+    const char *life = "Vidas:  %d";
+    const char *score = "Score: %d";
+
+    int sizeScore = MeasureText(score, 30);
+
+    if(gw->gameState == GAME_START || gw->gameState == GAME_WIN){
+        DrawText(TextFormat(life, gw->life), 10, GetScreenHeight() - 40, 30, WHITE);
+        DrawText(TextFormat(score, getPlayer(gw)->score), GetScreenWidth() - sizeScore - 30, GetScreenHeight() - 40, 30, WHITE);
+    }
+}
+
+void updateLife(GameWorld *gw){
+    if(gw->ball.pos.y + gw->ball.radius > GetScreenHeight()){
+        gw->ball.pos.y = GetScreenHeight() / 2;
+        gw->ball.pos.x = GetScreenWidth() / 2;
+        gw->ball.vel.x = 0;
+        gw->ball.vel.y = 0;
+        gw->gameState = GAME_PAUSE;
+        gw->life--;
+        gw->player.pos.x = GetScreenWidth() / 2 - 35;
+        gw->player.pos.y = GetScreenHeight() - 75;
+        if(gw->life == 0){
+            gw->gameState = GAME_OVER;
+        }
+    }
+}

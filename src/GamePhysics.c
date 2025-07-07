@@ -3,27 +3,71 @@
 #include "Ball.h"
 #include "GameEnemy.h"
 
+int distance(int x1, int y1, int x2, int y2){
+    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+}
+
 //check the collision between the ball and the player
 void updateCollision(Ball *b, Player *p, GameEnemy *ge){
-    //verify if there was a collision in the top 
-    if(b->pos.x + b->radius <= p->pos.x + p->width && b->pos.x - b->radius >= p->pos.x){
-        if(b->pos.y + b->radius >= p->pos.y ){
-            //general top collision modifier
-            b->pos.y = b->pos.y - b->radius;
-            b->vel.y = -b->vel.y;
-        }else if(b->pos.y + b->radius < p->pos.y + p->height && b->pos.y - b->radius > p->pos.y){
-            b->vel.y = -b->vel.y;
-            b->vel.x = -b->vel.x;
-        }
+    int xPoint = b->pos.x;
+    int yPoint = b->pos.y;
+
+    if(xPoint < p->pos.x){
+        xPoint = p->pos.x;
+    }else if(xPoint > p->pos.x + p->width){
+        xPoint = p->pos.x + p->width;
     }
 
-    // for(int i = 0; i < ge->amount * ge->line; i++){
-    //     const Enemy comparisonEnemy = *ge->enemies[i];
-    //     const Size comparisonHeight = *ge->size.height;
+    if(yPoint < p->pos.y){
+        yPoint = p->pos.y;
+    }else if(yPoint > p->pos.y + p->height){
+        yPoint = p->pos.y;
+    }
 
-    //     if(b->pos.y - b->radius < comparisonEnemy.position.y + ())
-    // }
+    if(distance(xPoint, yPoint, b->pos.x, b->pos.y) < (b->radius * b->radius)){
+            if(IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)){
+                if(b->vel.x > 0){
+                    b->vel.x = -b->vel.x;
+                }
+                
+            }else if(IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)){
+                if(b->vel.x < 0){
+                    b->vel.x = -b->vel.x;
+                }
+            }
+            b->pos.y = p->pos.y - b->radius;
+            b->vel.y = -b->vel.y;
+    }
+
+    for(int i = 0; i < ge->amount * ge->line; i++){
+        int xEnemy = b->pos.x;
+        int yEnemy = b->pos.y;
+        Enemy *e = ge->enemies[i];
+
+        if(e->health > 0){
+            if(xEnemy < e->position.x){
+                xEnemy = e->position.x;
+            } else if(xEnemy > e->position.x + ge->size.width){
+                xEnemy = e->position.x + ge->size.width;
+            }
+
+            if(yEnemy < e->position.y){
+                yEnemy = e->position.y;
+            } else if(yEnemy > e->position.y + ge->size.height){
+                yEnemy = e->position.y + ge->size.height;
+            }
+
+            if(distance(xEnemy, yEnemy, b->pos.x, b->pos.y) < (b->radius * b->radius)){
+                p->score += updateEnemyHealth(e, -100);
+                ge->totalEnemies--;
+                b->pos.y = b->pos.y + b->radius;
+                b->vel.y = -b->vel.y;
+            }
+        }
+    }
 }
+          
+
 //randomize the ball's direction in the beginning of each round based on an odd or even number logic
 int directionRandomizer (void){
     int direction = GetRandomValue(1, 10);
