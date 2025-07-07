@@ -19,6 +19,7 @@ typedef struct GameWorld {
     GameEnemy gameEnemy;
     Player player;
     Ball ball;
+    int stage;
 } GameWorld;
 
 inline GameEnemy* getGameEnemy(GameWorld *gw) {
@@ -58,3 +59,4 @@ void drawGameLayout(GameWorld *gw);
 void drawPlayerStats(GameWorld *gw);
 
 void updateLife(GameWorld *gw);
+

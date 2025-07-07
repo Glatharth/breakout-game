@@ -3,13 +3,13 @@
 #include <stdlib.h>
 #include "include/raylib/raylib.h"
 
-GameEnemy* initGameEnemy() {
+GameEnemy* initGameEnemy(int stage) {
     GameEnemy *ge = malloc(sizeof(GameEnemy));
-    ge->amount = 20; // Number of enemies per line
-    ge->line = 8;
+    ge->amount = 2 + (stage * 2); // Number of enemies per line
+    ge->line = 2 + (stage * 3);
     ge->space = 5;
     ge->fromPosition = (Vector2){0, 50}; //800 => width || 450 => height
-    ge->toPosition = (Vector2){800, 200}; //800 => width || 450 => height
+    ge->toPosition = (Vector2){GetScreenWidth(), 0.4 * GetScreenHeight()}; //800 => width || 450 => height
     ge->enemies = malloc(sizeof(Enemy*) * ge->amount * ge->line);
     ge->totalEnemies = ge->amount * ge->line;
     return ge;
@@ -85,7 +85,14 @@ void drawGameEnemies(GameEnemy *ge) {
 void updateEnemies(GameEnemy *ge) {
     for (int i = 0; i < ge->amount * ge->line; i++) {
         Enemy *enemy = ge->enemies[i];
-        enemy->color = ColorFromHSV(i * 2, 1, 1);
+        Color current = enemy->color;
+        Color newColor = {
+            (current.r + GetRandomValue(0, 2)) % 256,
+            (current.g + GetRandomValue(0, 2)) % 256,
+            (current.b + GetRandomValue(0, 2)) % 256,
+            200
+        };
+        enemy->color = newColor;
     }
 }
 
@@ -111,3 +118,4 @@ void setPulseEnemy(Enemy *enemy, const int pulse) {
 int getPulseEnemy(const int pulse) {
     return pulse * 10;
 }
+

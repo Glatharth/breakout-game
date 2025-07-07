@@ -38,7 +38,6 @@ inline GameWorld* getGameWorld(GameWindow *gw) {
     return gw->gw;
 }
 
-
 /**
  * @brief Creates a dinamically allocated GameWindow struct instance.
  */

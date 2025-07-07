@@ -72,8 +72,8 @@ void updateCollision(Ball *b, Player *p, GameEnemy *ge){
 int directionRandomizer (void){
     int direction = GetRandomValue(1, 10);
     if(direction % 2 == 0){
-        return 150;
+        return 250;
     }else{
-        return -150;
+        return -250;
     }
 }

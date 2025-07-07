@@ -27,7 +27,7 @@ typedef struct GameEnemy {
     int totalEnemies;
 } GameEnemy;
 
-GameEnemy* initGameEnemy();
+GameEnemy* initGameEnemy(int stage);
 
 void createGameEnemies(GameEnemy *ge);
 void drawGameEnemies(GameEnemy *ge);

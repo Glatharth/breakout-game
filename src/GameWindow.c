@@ -107,23 +107,19 @@ void initGameWindow( GameWindow *gameWindow ) {
 
         gameWindow->gw = createGameWorld();
 
-        GameWorld *gWorld = getGameWorld(gameWindow);
-
         // game loop
         while ( !WindowShouldClose() ) {
-            if(gWorld->gameState == GAME_PAUSE || gWorld->gameState == GAME_OVER){
+            if(getGameWorld(gameWindow)->gameState == GAME_PAUSE || getGameWorld(gameWindow)->gameState == GAME_OVER){
                 if(IsKeyPressed(KEY_SPACE)){
-                    gWorld->gameState = GAME_START;
-                    gWorld->ball.vel.x = directionRandomizer();
-                    gWorld->ball.vel.y = 150;
-                    if(gWorld->life == 0){
-                        gWorld->life = 3;
-                        getPlayer(gWorld)->score = 0;
+                    getGameWorld(gameWindow)->gameState = GAME_START;
+                    getGameWorld(gameWindow)->ball.vel.x = directionRandomizer();
+                    getGameWorld(gameWindow)->ball.vel.y = 150;
+                    if(getGameWorld(gameWindow)->life == 0){
+                        getGameWorld(gameWindow)->life = 3;
+                        getGameWorld(gameWindow)->score = 0;
                     }
                     
                 }
-            }else if(getGameEnemy(gWorld)->totalEnemies <= 0){
-                gWorld->gameState = GAME_WIN;
             }else{
                 updateGameWorld( gameWindow->gw, GetFrameTime() );
             }
@@ -149,7 +145,3 @@ void initGameWindow( GameWindow *gameWindow ) {
 /**
  * @brief Destroys a GameWindow object and its dependecies.
  */
-void destroyGameWindow( GameWindow *gameWindow ) {
-    destroyGameWorld( gameWindow->gw );
-    free( gameWindow );
-}
