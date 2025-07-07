@@ -66,7 +66,7 @@ void drawGameEnemies(GameEnemy *ge) {
             }
         }
 
-        if (enemy->health < 0 && enemy->hide) {
+        if (enemy->health <= 0 && enemy->hide) {
             continue;
         }
         DrawRectangle(
@@ -93,7 +93,7 @@ int updateEnemyHealth(Enemy *enemy, const int health) {
     }
     if (enemy->health > 0) {
         enemy->health += health;
-        if (enemy->health < 0) {
+        if (enemy->health <= 0) {
             setPulseEnemy(enemy, 3);
             return enemy->exp;
         }
