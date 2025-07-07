@@ -12,5 +12,3 @@ typedef struct Player{
 void drawPlayer(Player *p);
 
 void updatePlayer(Player *p, float delta);
-
-int lifeManager(void);

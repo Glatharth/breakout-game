@@ -1,7 +1,6 @@
 #include "raylib/raylib.h"
 #include "Player.h"
 #include "enums.h"
-#include "GameWorld.h"
 //draws the player on the screen
 void drawPlayer(Player *p){
     DrawRectangle(
@@ -16,7 +15,7 @@ void drawPlayer(Player *p){
 //manage the players movement 
 void updatePlayer(Player *p, float delta){
     //ensure that the player will be reset to it's original position when a life is lost
-    // if(gw->gameState == GAME_PAUSE){
+    // if(gw->gameState == GAME_PAUSE || gw->gameState == GAME_OVER){
     //     p->pos.x = GetScreenWidth() / 2 - 35;
     //     p->pos.y = GetScreenHeight() - 75;
     // }
@@ -35,23 +34,3 @@ void updatePlayer(Player *p, float delta){
         p->pos.x = GetScreenWidth() - p->width;
     }
 }
-
-int lifeManager(void) {
-    int life = 3;
-    // switch (gw->roundNumber){
-    //     case 0:
-    //         life = 3;
-    //     break;
-    //     case 1:
-    //         life = 2;
-    //     break;
-    //     case 2:
-    //         life = 1;
-    //     break;
-    //     default:
-    //         life = 0;
-    //     break;
-    // }
-    return life;
-}
-

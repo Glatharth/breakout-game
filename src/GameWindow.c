@@ -12,6 +12,8 @@
 #include "GameWorld.h"
 #include "ResourceManager.h"
 #include "raylib/raylib.h"
+#include "GamePhysics.h"
+
 
 /**
  * @brief Creates a dinamically allocated GameWindow struct instance.
@@ -107,7 +109,20 @@ void initGameWindow( GameWindow *gameWindow ) {
 
         // game loop
         while ( !WindowShouldClose() ) {
-            updateGameWorld( gameWindow->gw, GetFrameTime() );
+            if(getGameWorld(gameWindow)->gameState == GAME_PAUSE || getGameWorld(gameWindow)->gameState == GAME_OVER){
+                if(IsKeyPressed(KEY_SPACE)){
+                    getGameWorld(gameWindow)->gameState = GAME_START;
+                    getGameWorld(gameWindow)->ball.vel.x = directionRandomizer();
+                    getGameWorld(gameWindow)->ball.vel.y = 150;
+                    if(getGameWorld(gameWindow)->life == 0){
+                        getGameWorld(gameWindow)->life = 3;
+                        getGameWorld(gameWindow)->score = 0;
+                    }
+                    
+                }
+            }else{
+                updateGameWorld( gameWindow->gw, GetFrameTime() );
+            }
             drawGameWorld( gameWindow->gw );
         }
 
