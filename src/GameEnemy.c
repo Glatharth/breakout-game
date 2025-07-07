@@ -32,8 +32,9 @@ void createGameEnemies(GameEnemy *ge) {
                 fprintf(stderr, "Memory allocation failed!\n");
                 exit(EXIT_FAILURE);
             }
-            ge->enemies[arrayIndex]->health = GetRandomValue(100, 400);
-            ge->enemies[arrayIndex]->maxHealth = GetRandomValue(100, 400);
+            int randomizeEnemyHealth = GetRandomValue(1, 10);
+            ge->enemies[arrayIndex]->health = randomizeEnemyHealth <= 3 ? 300 : 100;
+            ge->enemies[arrayIndex]->maxHealth = randomizeEnemyHealth <= 3 ? 300 : 100;
             ge->enemies[arrayIndex]->pulse = 0;
             ge->enemies[arrayIndex]->exp = 5;
             ge->enemies[arrayIndex]->hide = false;

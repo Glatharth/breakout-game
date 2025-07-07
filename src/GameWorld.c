@@ -90,6 +90,8 @@ void updateGameWorld( GameWorld *gw, float delta ) {
     if (GAME_TIME <= (uint64_t)GetTime()) {
         GAME_TIME++;
         TOASTY = 0;
+    }if(IsKeyPressed(KEY_T)){
+        TOASTY = 2;
     }
     updateEnemies(enemies);
     updatePlayer(player, delta);

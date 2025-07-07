@@ -25,7 +25,6 @@ void updatePlayer(Player *p, float delta){
         if (volume < 0.0f) volume = 0.0f;
         SetMusicVolume(rm.inGame, volume);
     }
-
     if(IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)){
         p->pos.x -= p->vel * delta;
     }

@@ -126,7 +126,8 @@ void initGameWindow( GameWindow *gameWindow ) {
                         getPlayer(gWorld)->score = 0;
                         for(int i = 0; i < gWorld->gameEnemy.amount * gWorld->gameEnemy.line; i++){
                             if(gWorld->gameEnemy.enemies[i]->health <= 0){
-                                gWorld->gameEnemy.enemies[i]->health = GetRandomValue(100, 400);
+                                int randomizeEnemyHealth = GetRandomValue(1, 10);
+                                gWorld->gameEnemy.enemies[i]->health =  randomizeEnemyHealth <= 3 ? 300 : 100;
                             }
                         }
                     }
