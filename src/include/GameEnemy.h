@@ -1,6 +1,8 @@
 #pragma once
 #include "raylib/raylib.h"
 
+extern int TOASTY;
+
 typedef struct Enemy {
     int health;     // Health of the enemy
     int maxHealth;

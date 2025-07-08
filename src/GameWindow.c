@@ -9,11 +9,13 @@
 #include <stdbool.h>
 
 #include "GameWindow.h"
+
+#include <stdint.h>
+
 #include "GameWorld.h"
 #include "ResourceManager.h"
 #include "raylib/raylib.h"
 #include "GamePhysics.h"
-
 
 /**
  * @brief Creates a dinamically allocated GameWindow struct instance.
@@ -109,18 +111,26 @@ void initGameWindow( GameWindow *gameWindow ) {
 
         GameWorld *gWorld = getGameWorld(gameWindow);
 
+        SetMusicVolume(rm.inGame, 0.1f);
+
         // game loop
         while ( !WindowShouldClose() ) {
             if(gWorld->gameState == GAME_PAUSE || gWorld->gameState == GAME_OVER){
                 if(IsKeyPressed(KEY_SPACE)){
+                    TOASTY = 0;
                     gWorld->gameState = GAME_START;
                     gWorld->ball.vel.x = directionRandomizer();
                     gWorld->ball.vel.y = 150;
                     if(gWorld->life == 0){
                         gWorld->life = 3;
                         getPlayer(gWorld)->score = 0;
+                        for(int i = 0; i < gWorld->gameEnemy.amount * gWorld->gameEnemy.line; i++){
+                            if(gWorld->gameEnemy.enemies[i]->health <= 0){
+                                int randomizeEnemyHealth = GetRandomValue(1, 10);
+                                gWorld->gameEnemy.enemies[i]->health =  randomizeEnemyHealth <= 3 ? 300 : 100;
+                            }
+                        }
                     }
-                    
                 }
             }else if(getGameEnemy(gWorld)->totalEnemies <= 0){
                 gWorld->gameState = GAME_WIN;
@@ -143,6 +153,7 @@ void initGameWindow( GameWindow *gameWindow ) {
         CloseWindow();
 
     }
+
 
 }
 

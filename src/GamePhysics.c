@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Ball.h"
 #include "GameEnemy.h"
+#include "ResourceManager.h"
 
 int distance(int x1, int y1, int x2, int y2){
     return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
@@ -25,18 +26,19 @@ void updateCollision(Ball *b, Player *p, GameEnemy *ge){
     }
 
     if(distance(xPoint, yPoint, b->pos.x, b->pos.y) < (b->radius * b->radius)){
-            if(IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)){
-                if(b->vel.x > 0){
-                    b->vel.x = -b->vel.x;
-                }
-                
-            }else if(IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)){
-                if(b->vel.x < 0){
-                    b->vel.x = -b->vel.x;
-                }
+        if(IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)){
+            if(b->vel.x > 0){
+                b->vel.x = -b->vel.x;
             }
-            b->pos.y = p->pos.y - b->radius;
-            b->vel.y = -b->vel.y;
+
+        }else if(IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)){
+            if(b->vel.x < 0){
+                b->vel.x = -b->vel.x;
+            }
+        }
+        b->pos.y = p->pos.y - b->radius;
+        b->vel.y = -b->vel.y;
+        PlaySound(rm.hitPlayer);
     }
 
     for(int i = 0; i < ge->amount * ge->line; i++){
@@ -58,8 +60,11 @@ void updateCollision(Ball *b, Player *p, GameEnemy *ge){
             }
 
             if(distance(xEnemy, yEnemy, b->pos.x, b->pos.y) < (b->radius * b->radius)){
-                p->score += updateEnemyHealth(e, -100);
-                ge->totalEnemies--;
+                const int exp = updateEnemyHealth(e, -100);
+                if (exp > 0){
+                    p->score += exp;
+                    ge->totalEnemies--;
+                }
                 b->pos.y = b->pos.y + b->radius;
                 b->vel.y = -b->vel.y;
             }
@@ -72,8 +77,8 @@ void updateCollision(Ball *b, Player *p, GameEnemy *ge){
 int directionRandomizer (void){
     int direction = GetRandomValue(1, 10);
     if(direction % 2 == 0){
-        return 150;
+        return 350;
     }else{
-        return -150;
+        return -350;
     }
 }
