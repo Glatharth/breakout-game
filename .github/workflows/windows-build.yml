@@ -25,8 +25,14 @@ jobs:
         shell: msys2 {0}
         run: ./build.bat -compile
 
-      - name: Upload executable
+      - name: Download OpenAL32.dll
+        run: curl -L -o OpenAL32.dll https://github.com/raysan5/raylib/releases/download/4.5.0/OpenAL32.dll
+
+      - name: Upload executable, DLL, and resources
         uses: actions/upload-artifact@v4
         with:
           name: compiled-exe
-          path: ./*.exe
+          path: |
+            ./*.exe
+            ./OpenAL32.dll
+            ./resources/**
