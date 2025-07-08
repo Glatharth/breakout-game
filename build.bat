@@ -18,7 +18,7 @@ SHIFT
 SET currentStep=-1
 
 FOR %%I in (.) DO SET CurrentFolderName=%%~nxI
-SET CompiledFile=%CurrentFolderNam'e%.exe
+SET CompiledFile=%CurrentFolderName%.exe
 
 IF "%switch%"=="" GOTO allSteps
 IF "%switch%"=="-clean" GOTO cleanSteps
