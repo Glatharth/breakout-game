@@ -1,5 +1,7 @@
 #include "raylib/raylib.h"
 #include "Player.h"
+
+#include "GameEnemy.h"
 #include "ResourceManager.h"
 //draws the player on the screen
 void drawPlayer(Player *p){
@@ -24,6 +26,9 @@ void updatePlayer(Player *p, float delta){
         volume -= 0.01f;
         if (volume < 0.0f) volume = 0.0f;
         SetMusicVolume(rm.inGame, volume);
+    }
+    if (IsKeyDown(KEY_T)){
+        TOASTY = 2;
     }
     if(IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)){
         p->pos.x -= p->vel * delta;

@@ -32,11 +32,11 @@ void createGameEnemies(GameEnemy *ge) {
                 fprintf(stderr, "Memory allocation failed!\n");
                 exit(EXIT_FAILURE);
             }
-            int randomizeEnemyHealth = GetRandomValue(1, 10);
+            const int randomizeEnemyHealth = GetRandomValue(1, 10);
             ge->enemies[arrayIndex]->health = randomizeEnemyHealth <= 3 ? 300 : 100;
             ge->enemies[arrayIndex]->maxHealth = randomizeEnemyHealth <= 3 ? 300 : 100;
             ge->enemies[arrayIndex]->pulse = 0;
-            ge->enemies[arrayIndex]->exp = 5;
+            ge->enemies[arrayIndex]->exp = (int)(ge->enemies[arrayIndex]->maxHealth * 0.05);
             ge->enemies[arrayIndex]->hide = false;
             ge->enemies[arrayIndex]->position = (Vector2){
                 ge->fromPosition.x + (float)(i * (ge->size.width + ge->space)),
